@@ -1,6 +1,5 @@
 "use client";
 
-import { getFileViewUrl } from "@/actions/files.actions";
 import { FilePreviewModal } from "@/components/modals/file-preview.modal";
 import { WarningModal } from "@/components/modals/warning.modal";
 import { Button } from "@/components/ui/button";
@@ -26,7 +25,7 @@ const FileItem = ({ file, onDelete, onRename }: FileItemProps) => {
   const [showRenameModal, setShowRenameModal] = useState(false);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
   const [newFileName, setNewFileName] = useState(file.name);
-  const [isLoading, setIsLoading] = useState(false);  
+  const isLoading = false;
   
   const formattedDate = new Date(file.createdAt).toLocaleDateString();
 
@@ -62,28 +61,6 @@ const FileItem = ({ file, onDelete, onRename }: FileItemProps) => {
     e.stopPropagation();
     setNewFileName(file.name);
     setShowRenameModal(true);
-  };
-
-  const handleView = async (e: React.MouseEvent) => {
-    e.stopPropagation();
-    try {
-      setIsLoading(true);
-      const result = await getFileViewUrl(file.id);
-      
-      if (result.error) {
-        console.error("View error:", result.error);
-        return;
-      }
-      
-      if (result.viewUrl) {
-        const viewUrl = result.viewUrl;
-        window.open(viewUrl, '_blank');
-      }
-    } catch (error) {
-      console.error("Error viewing file:", error);
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   const handlePreview = (e: React.MouseEvent) => {

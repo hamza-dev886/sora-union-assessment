@@ -1,13 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+import { deleteFile, getFiles, renameFile } from "@/actions/files.actions";
+import { deleteFolder, getFolders, renameFolder } from "@/actions/folders.actions";
+import ContentListing from "@/components/drive/content-listing/content-listing";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getFolders, deleteFolder, renameFolder } from "@/actions/folders.actions";
-import { getFiles, deleteFile, renameFile } from "@/actions/files.actions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import ContentListing from "@/components/drive/content-listing/content-listing";
 
 export default function Home() {
   const router = useRouter();

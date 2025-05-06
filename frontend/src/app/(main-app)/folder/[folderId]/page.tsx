@@ -1,22 +1,21 @@
 "use client";
 
-import { useSession } from "next-auth/react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import FolderItem from "@/components/drive/folder-item";
+import { deleteFile, getFiles, renameFile } from "@/actions/files.actions";
+import { deleteFolder, getFolderPath, getFolders, renameFolder } from "@/actions/folders.actions";
 import FileItem from "@/components/drive/file-item";
-import { getFolders, deleteFolder, renameFolder, getFolderPath } from "@/actions/folders.actions";
-import { getFiles, deleteFile, renameFile } from "@/actions/files.actions";
+import FolderItem from "@/components/drive/folder-item";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
-import Link from "next/link";
-import React, { useState } from "react";
 
 export default function FolderPage() {
   const { folderId } = useParams<{ folderId: string }>();
   const { data: session, status: sessionStatus } = useSession();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const [parentFolder, setParentFolder] = useState<any>(null);
+  // const [parentFolder, setParentFolder] = useState<any>(null);
   const isSessionLoading = sessionStatus === "loading";
 
   const { 
@@ -53,7 +52,7 @@ export default function FolderPage() {
       }
       
       if (data.length > 0) {
-        setParentFolder(data[data.length - 1]);
+        // setParentFolder(data[data.length - 1]);
       }
       
       return data;
@@ -104,14 +103,6 @@ export default function FolderPage() {
   const isLoading = isSessionLoading || foldersLoading || filesLoading || currentFolderLoading || folderPathLoading;
   const error = foldersError || filesError;
   const errorMessage = error instanceof Error ? error.message : "Failed to fetch data";
-
-  const handleBackClick = () => {
-    if (parentFolder) {
-      router.push(`/folder/${parentFolder.id}`);
-    } else {
-      router.push('/');
-    }
-  };
 
   const handleFolderClick = (nestedFolderId: string) => {
     router.push(`/folder/${nestedFolderId}`);

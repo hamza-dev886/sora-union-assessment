@@ -3,7 +3,6 @@
 import { downloadFile, getFileViewUrl } from "@/actions/files.actions";
 import { Button } from "@/components/ui/button";
 import { Download, File, FileAudio, FileImage, FileText, FileVideo, X } from "lucide-react";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 interface FilePreviewModalProps {
@@ -253,7 +252,14 @@ export const FilePreviewModal = ({ isOpen, onClose, file }: FilePreviewModalProp
         </div>
       );
     } else if (mimeType.includes("image")) {
-      return <div className="flex items-center justify-center h-full">{blobUrl && <img src={blobUrl} alt={file.name} className="max-h-full max-w-full object-contain" onError={() => setError("Failed to load image")} />}</div>;
+      return (
+        <div className="flex items-center justify-center h-full">
+          {blobUrl && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={blobUrl} alt={file.name} className="max-h-full max-w-full object-contain" onError={() => setError("Failed to load image")} />
+          )}
+        </div>
+      );
     } else if (mimeType.includes("video")) {
       return (
         <div className="flex items-center justify-center h-full">
